@@ -13,9 +13,9 @@
 
 
 	function deleteCounter(event):void{
-		const id = event.detail.order
-		const firsthalfofArray = CounterArray.slice(0,id)
-		const letterhalfofArray = CounterArray.slice(id+1)
+		const id:number = event.detail.order
+		const firsthalfofArray:{id:number,name:string,count:number}[] = CounterArray.slice(0,id)
+		const letterhalfofArray:{id:number,name:string,count:number}[] = CounterArray.slice(id+1)
 		
 		for (const entry of letterhalfofArray){
 			firsthalfofArray[firsthalfofArray.length] = {id:firsthalfofArray.length,name:entry.name,count:entry.count};
@@ -26,17 +26,17 @@
 
 	}
 
-	function updateCount(event){
-		const id = event.detail.Id;
-		const count = event.detail.Count;
+	function updateCount(event):void{
+		const id:number = event.detail.Id;
+		const count:number = event.detail.Count;
 		
 		CounterArray[id] = {id:id,name:CounterArray[id].name,count:count};
 		Sum = SumofCount();
 
 	}
 
-	function SumofCount(){
-		let sum=0;
+	function SumofCount():number{
+		let sum:number=0;
 
 		for(const entry of CounterArray){
 			sum = sum + entry.count;
