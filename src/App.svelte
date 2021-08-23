@@ -2,48 +2,31 @@
   import Counter from "./component/Counter.svelte";
   import Box from "./component/Box.svelte";
   import { fly } from "svelte/transition";
+import { current_component, prevent_default } from "svelte/internal";
 
-  $: CounterArray = [
+  let counterArray = [
     {
       //カウンター
       id: 0, //カウンターのid
       name: "new", //カウンターの名前
-      count: 0, //カウンターのカウント値
-    },
+      count: 0 //カウンターのカウント値
+    }
   ];
 
-  $: Sum = 0; //各カウンターのカウント合計値
+  let sum = 0; //各カウンターのカウント合計値
 
   function addCounter(): void {
     //カウンターを増やす関数
+	const result = [].concat(counterArray,{id:counterArray.length,name:"new",count:0});
+    $:sum = counterArray.reduce((prevent_default,current_component,indexedDB,array)=>{
+		return pre + current.count}); //各カウンターのカウント合計値更新
 
-    CounterArray[CounterArray.length] = {
-      id: CounterArray.length,
-      name: "new",
-      count: 0,
-    };
-    Sum = SumofCount(); //各カウンターのカウント合計値更新
   }
 
-  function deleteCounter(event): void {
-    //カウンターを減らす関数
-
+  function deleteCounter(event): void { //カウンターを減らす関数
     const id: number = event.detail.order; //deleteされたカウンターのidを取得
-    const firsthalfofArray: { id: number; name: string; count: number }[] =
-      CounterArray.slice(0, id);
-    const letterhalfofArray: { id: number; name: string; count: number }[] =
-      CounterArray.slice(id + 1);
-
-    for (const entry of letterhalfofArray) {
-      firsthalfofArray[firsthalfofArray.length] = {
-        id: firsthalfofArray.length,
-        name: entry.name,
-        count: entry.count,
-      };
-    }
-
-    CounterArray = firsthalfofArray;
-    Sum = SumofCount(); //各カウンターのカウント合計値更新
+	
+    sum = SumofCount(); //各カウンターのカウント合計値更新
   }
 
   function updateCount(event): void {
@@ -51,7 +34,7 @@
     const count: number = event.detail.Count; //最新のカウント値
 
     CounterArray[id] = { id: id, name: CounterArray[id].name, count: count }; //カウント値を更新
-    Sum = SumofCount(); //各カウンターのカウント合計値更新
+    sum = SumofCount(); //各カウンターのカウント合計値更新
   }
 
   function SumofCount(): number {
@@ -72,9 +55,7 @@
 <h1>サンプル：カウンター作成サイト</h1>
 
 <p>
-  <button on:click={addCounter} class="newcounter"
-    >新しいカウンターを作成</button
-  >
+  <button on:click={addCounter} class="newcounter">新しいカウンターを作成</button>
 </p>
 
 {#each CounterArray as counter (counter.id)}
@@ -85,15 +66,10 @@
       <span
         class="Countercount"
         style="display: inline-block"
-        in:fly={{ y: -20 }}>{counter.count}</span
-      >
+        in:fly={{ y: -20 }}>{counter.count}</span>
     {/key}
 
-    <Counter
-      on:deleteorder={deleteCounter}
-      on:updatecountorder={updateCount}
-      id={counter.id}
-    />
+    <Counter on:deleteorder={deleteCounter} on:updatecountorder={updateCount} id={counter.id}/>
   </Box>
 {/each}
 
@@ -109,12 +85,11 @@
 </div>
 
 <div>
-  {#key Sum}
+  {#key sum}
     sum of count:<span
       class="Countercount"
       style="display: inline-block"
-      in:fly={{ y: -20 }}>{Sum}</span
-    >
+      in:fly={{ y: -20 }}>{sum}</span>
   {/key}
 </div>
 

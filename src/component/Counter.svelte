@@ -3,7 +3,7 @@
   const dispatch: any = createEventDispatcher();
   const dispatch2: any = createEventDispatcher();
   export let id: number;
-  let count: number = 0;
+  let count: number;
 
   function CounterInc(): void {
     //updatemessageを親コンポーネントに送信
