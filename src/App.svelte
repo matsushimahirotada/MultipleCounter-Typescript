@@ -62,7 +62,7 @@
 
 <!-- svelte-ignore non-top-level-reactive-declaration -->
 
-<h1>カウンター</h1>
+<h1>サンプル：カウンター作成サイト</h1>
 
 <p>
 	<button on:click={addCounter} class="newcounter">新しいカウンターを作成</button>
