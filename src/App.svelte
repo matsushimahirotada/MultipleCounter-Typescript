@@ -2,51 +2,71 @@
   import Counter from "./component/Counter.svelte";
   import Box from "./component/Box.svelte";
   import { fly } from "svelte/transition";
-import { current_component, prevent_default } from "svelte/internal";
 
-  let counterArray = [
-    {
-      //カウンター
-      id: 0, //カウンターのid
-      name: "new", //カウンターの名前
-      count: 0 //カウンターのカウント値
-    }
-  ];
+  interface counterObj {
+    id: number;
+    name: string;
+    count: number;
+  }
 
-  let sum = 0; //各カウンターのカウント合計値
+  let currentid: number = 0;
+  $: nextid = currentid + 1;
+
+  let counterArray: counterObj[] = [{ id: 0, name: "new", count: 0 }];
+
+  let sum: number = 0; //各カウンターのカウント合計値
 
   function addCounter(): void {
     //カウンターを増やす関数
-	const result = [].concat(counterArray,{id:counterArray.length,name:"new",count:0});
-    $:sum = counterArray.reduce((prevent_default,current_component,indexedDB,array)=>{
-		return pre + current.count}); //各カウンターのカウント合計値更新
-
+    const result = [].concat(counterArray, {
+      id: nextid,
+      name: "new",
+      count: 0,
+    });
+    counterArray = result;
+    currentid += 1;
   }
 
-  function deleteCounter(event): void { //カウンターを減らす関数
+  const dedupeArray = (ary, key) => {
+    let values = [];
+    return ary.filter((e) => {
+      if (values.indexOf(e[key]) === -1) {
+        values = [].concat(values, e[key]);
+        return e;
+      }
+    });
+  };
+
+  function deleteCounter(event): void {
+    //カウンターを減らす関数
     const id: number = event.detail.order; //deleteされたカウンターのidを取得
-	
-    sum = SumofCount(); //各カウンターのカウント合計値更新
+    const index: number = counterArray.findIndex(
+      (element: counterObj) => element.id === id
+    );
+    if (index !== -1) {
+      const firstArray: counterObj[] = counterArray.slice(0, index);
+      const secondArray: counterObj[] = counterArray.slice(index + 1);
+      const tmpArray = [].concat(firstArray, secondArray);
+      counterArray = tmpArray; //dedupeArray(tmpArray, "id");
+      sum = counterArray.reduce(
+        (sum: number, element) => sum + element.count,
+        0
+      );
+    }
   }
 
   function updateCount(event): void {
     const id: number = event.detail.Id; //カウント値が変動したカウンターのidを取得
     const count: number = event.detail.Count; //最新のカウント値
-
-    CounterArray[id] = { id: id, name: CounterArray[id].name, count: count }; //カウント値を更新
-    sum = SumofCount(); //各カウンターのカウント合計値更新
-  }
-
-  function SumofCount(): number {
-    //各カウンターのカウント合計値を返す関数
-
-    let sum: number = 0;
-
-    for (const entry of CounterArray) {
-      sum = sum + entry.count;
-    }
-
-    return sum;
+    const index: number = counterArray.findIndex(
+      (element: counterObj) => element.id === id
+    );
+    counterArray[index] = {
+      id: id,
+      name: counterArray[index].name,
+      count: count,
+    };
+    sum = counterArray.reduce((sum: number, element) => sum + element.count, 0); //各カウンターのカウント合計値更新
   }
 </script>
 
@@ -55,10 +75,12 @@ import { current_component, prevent_default } from "svelte/internal";
 <h1>サンプル：カウンター作成サイト</h1>
 
 <p>
-  <button on:click={addCounter} class="newcounter">新しいカウンターを作成</button>
+  <button on:click={addCounter} class="newcounter"
+    >新しいカウンターを作成</button
+  >
 </p>
 
-{#each CounterArray as counter (counter.id)}
+{#each counterArray as counter (counter.id)}
   <Box>
     <input bind:value={counter.name} />
 
@@ -66,17 +88,22 @@ import { current_component, prevent_default } from "svelte/internal";
       <span
         class="Countercount"
         style="display: inline-block"
-        in:fly={{ y: -20 }}>{counter.count}</span>
+        in:fly={{ y: -20 }}>{counter.count}</span
+      >
     {/key}
 
-    <Counter on:deleteorder={deleteCounter} on:updatecountorder={updateCount} id={counter.id}/>
+    <Counter
+      on:deleteorder={deleteCounter}
+      on:updatecountorder={updateCount}
+      id={counter.id}
+    />
   </Box>
 {/each}
 
 <div>
   title list:
-  {#each CounterArray as { id, name }}
-    {#if id == CounterArray.length - 1}
+  {#each counterArray as { id, name }}
+    {#if id === currentid}
       {name}
     {:else}
       {name},
@@ -89,7 +116,8 @@ import { current_component, prevent_default } from "svelte/internal";
     sum of count:<span
       class="Countercount"
       style="display: inline-block"
-      in:fly={{ y: -20 }}>{sum}</span>
+      in:fly={{ y: -20 }}>{sum}</span
+    >
   {/key}
 </div>
 
