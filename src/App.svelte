@@ -3,67 +3,63 @@
   import Box from "./component/Box.svelte";
   import { fly } from "svelte/transition";
 
-  $: CounterArray = [
-    {
-      //カウンター
-      id: 0, //カウンターのid
-      name: "new", //カウンターの名前
-      count: 0, //カウンターのカウント値
-    },
-  ];
+  interface counterObj {
+    id: number;
+    name: string;
+    count: number;
+  }
 
-  $: Sum = 0; //各カウンターのカウント合計値
+  let currentId: number = 0;
+  $: nextId = currentId + 1;
+
+  let counterArray: counterObj[] = [{ id: 0, name: "new", count: 0 }];
+
+  let sum: number = 0; //各カウンターのカウント合計値
 
   function addCounter(): void {
     //カウンターを増やす関数
-
-    CounterArray[CounterArray.length] = {
-      id: CounterArray.length,
+    counterArray = [].concat(counterArray, {
+      id: nextId,
       name: "new",
       count: 0,
-    };
-    Sum = SumofCount(); //各カウンターのカウント合計値更新
+    });
+    currentId += 1;
   }
 
   function deleteCounter(event): void {
     //カウンターを減らす関数
-
-    const id: number = event.detail.order; //deleteされたカウンターのidを取得
-    const firsthalfofArray: { id: number; name: string; count: number }[] =
-      CounterArray.slice(0, id);
-    const letterhalfofArray: { id: number; name: string; count: number }[] =
-      CounterArray.slice(id + 1);
-
-    for (const entry of letterhalfofArray) {
-      firsthalfofArray[firsthalfofArray.length] = {
-        id: firsthalfofArray.length,
-        name: entry.name,
-        count: entry.count,
-      };
+    const id: number = event.detail.id; //deleteされたカウンターのidを取得
+    const index: number = counterArray.findIndex(
+      (element: counterObj) => element.id === id
+    );
+    if (index !== -1) {
+      const firstArray: counterObj[] = counterArray.slice(0, index);
+      const secondArray: counterObj[] = counterArray.slice(index + 1);
+      counterArray = [].concat(firstArray, secondArray);
+      sum = counterArray.reduce(
+        (sum: number, element) => sum + element.count,
+        0
+      );
     }
-
-    CounterArray = firsthalfofArray;
-    Sum = SumofCount(); //各カウンターのカウント合計値更新
   }
 
   function updateCount(event): void {
-    const id: number = event.detail.Id; //カウント値が変動したカウンターのidを取得
-    const count: number = event.detail.Count; //最新のカウント値
-
-    CounterArray[id] = { id: id, name: CounterArray[id].name, count: count }; //カウント値を更新
-    Sum = SumofCount(); //各カウンターのカウント合計値更新
-  }
-
-  function SumofCount(): number {
-    //各カウンターのカウント合計値を返す関数
-
-    let sum: number = 0;
-
-    for (const entry of CounterArray) {
-      sum = sum + entry.count;
+    const id: number = event.detail.id; //カウント値が変動したカウンターのidを取得
+    const count: number = event.detail.count; //最新のカウント値
+    const index: number = counterArray.findIndex(
+      (element: counterObj) => element.id === id
+    );
+    if (index !== -1) {
+      counterArray[index] = {
+        id: id,
+        name: counterArray[index].name,
+        count: count,
+      };
+      sum = counterArray.reduce(
+        (sum: number, element) => sum + element.count,
+        0
+      ); //各カウンターのカウント合計値更新
     }
-
-    return sum;
   }
 </script>
 
@@ -72,26 +68,26 @@
 <h1>サンプル：カウンター作成サイト</h1>
 
 <p>
-  <button on:click={addCounter} class="newcounter"
+  <button on:click={addCounter} class="newCounter"
     >新しいカウンターを作成</button
   >
 </p>
 
-{#each CounterArray as counter (counter.id)}
+{#each counterArray as counter (counter.id)}
   <Box>
     <input bind:value={counter.name} />
 
     {#key counter.count}
       <span
-        class="Countercount"
+        class="counterCount"
         style="display: inline-block"
         in:fly={{ y: -20 }}>{counter.count}</span
       >
     {/key}
 
     <Counter
-      on:deleteorder={deleteCounter}
-      on:updatecountorder={updateCount}
+      on:deleteCounterOrder={deleteCounter}
+      on:updateCountOrder={updateCount}
       id={counter.id}
     />
   </Box>
@@ -99,8 +95,8 @@
 
 <div>
   title list:
-  {#each CounterArray as { id, name }}
-    {#if id == CounterArray.length - 1}
+  {#each counterArray as { id, name }}
+    {#if id === currentId}
       {name}
     {:else}
       {name},
@@ -109,27 +105,27 @@
 </div>
 
 <div>
-  {#key Sum}
+  {#key sum}
     sum of count:<span
-      class="Countercount"
+      class="counterCount"
       style="display: inline-block"
-      in:fly={{ y: -20 }}>{Sum}</span
+      in:fly={{ y: -20 }}>{sum}</span
     >
   {/key}
 </div>
 
 <style>
-  .newcounter {
+  .newCounter {
     color: #fff;
     background-color: #eb6100;
   }
 
-  .newcounter:hover {
+  .newCounter:hover {
     color: #fff;
     background: #f56500;
   }
 
-  .Countercount {
+  .counterCount {
     margin: 20px;
   }
 </style>
