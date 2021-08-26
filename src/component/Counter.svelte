@@ -1,33 +1,30 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  const dispatch: any = createEventDispatcher();
-  const dispatch2: any = createEventDispatcher();
-  export let id: number;
-  let count: number = 0;
+  export let valid: boolean;
+  export let count: number;
+  const dispatch = createEventDispatcher<{
+    deleteCounterOrder: { id: string; count: number };
+  }>();
 
   function counterInc(): void {
     //updatemessageを親コンポーネントに送信
     count += 1;
-    dispatch2("updateCountOrder", { id: id, count: count });
   }
 
   function counterDec(): void {
     //updatemessageを親コンポーネントに送信
     if (count > 0) {
       count -= 1;
-      dispatch2("updateCountOrder", { id: id, count: count });
     }
   }
 
   function counterReset(): void {
     //resetmessageを親コンポーネントに送信
     count = 0;
-    dispatch2("updateCountOrder", { id: id, count: count });
   }
 
   function deleteCounter(): void {
     //deletemessageを親コンポーネントに送信
-    dispatch("deleteCounterOrder", { id: id });
   }
 </script>
 

@@ -4,26 +4,25 @@
   import { fly } from "svelte/transition";
 
   interface counterObj {
-    id: number;
+    valid: boolean;
     name: string;
     count: number;
   }
 
-  let currentId: number = 0;
-  $: nextId = currentId + 1;
+  let counterArray: counterObj[] = [{ valid: true, name: "new", count: 0 }];
 
-  let counterArray: counterObj[] = [{ id: 0, name: "new", count: 0 }];
-
-  let sum: number = 0; //各カウンターのカウント合計値
+  $: sum = counterArray.reduce(
+    (sum: number, element) => sum + element.count,
+    0
+  ); //各カウンターのカウント合計値
 
   function addCounter(): void {
     //カウンターを増やす関数
     counterArray = [].concat(counterArray, {
-      id: nextId,
+      valid: true,
       name: "new",
       count: 0,
     });
-    currentId += 1;
   }
 
   function deleteCounter(event): void {
@@ -36,29 +35,6 @@
       const firstArray: counterObj[] = counterArray.slice(0, index);
       const secondArray: counterObj[] = counterArray.slice(index + 1);
       counterArray = [].concat(firstArray, secondArray);
-      sum = counterArray.reduce(
-        (sum: number, element) => sum + element.count,
-        0
-      );
-    }
-  }
-
-  function updateCount(event): void {
-    const id: number = event.detail.id; //カウント値が変動したカウンターのidを取得
-    const count: number = event.detail.count; //最新のカウント値
-    const index: number = counterArray.findIndex(
-      (element: counterObj) => element.id === id
-    );
-    if (index !== -1) {
-      counterArray[index] = {
-        id: id,
-        name: counterArray[index].name,
-        count: count,
-      };
-      sum = counterArray.reduce(
-        (sum: number, element) => sum + element.count,
-        0
-      ); //各カウンターのカウント合計値更新
     }
   }
 </script>
@@ -85,11 +61,7 @@
       >
     {/key}
 
-    <Counter
-      on:deleteCounterOrder={deleteCounter}
-      on:updateCountOrder={updateCount}
-      id={counter.id}
-    />
+    <Counter bind:count={counter.count} />
   </Box>
 {/each}
 
