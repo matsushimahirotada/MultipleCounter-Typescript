@@ -2,12 +2,12 @@
   export let valid: boolean;
   export let count: number;
 
-  function counterInc(): void {
+  function counterIncrement(): void {
     //updatemessageを親コンポーネントに送信
     count += 1;
   }
 
-  function counterDec(): void {
+  function counterDecrement(): void {
     //updatemessageを親コンポーネントに送信
     if (count > 0) {
       count -= 1;
@@ -26,31 +26,31 @@
 
 <!-- svelte-ignore non-top-level-reactive-declaration -->
 
-<button on:click={counterInc} class="counterInc"> + </button>
+<button on:click={counterIncrement} class="counterIncrement"> + </button>
 
-<button on:click={counterDec} class="counterDec"> - </button>
+<button on:click={counterDecrement} class="counterDecrement"> - </button>
 
 <button on:click={counterReset} class="counterReset"> 0 </button>
 
 <button on:click={deleteCounter} class="deleteCounter"> Delete </button>
 
 <style>
-  .counterInc {
+  .counterIncrement {
     background-color: #f00100;
     border: 2px solid #c03c1b;
   }
 
-  .counterInc:hover {
+  .counterIncrement:hover {
     color: #000;
     background: rgb(252, 74, 80);
   }
 
-  .counterDec {
+  .counterDecrement {
     background-color: cyan;
     border: 2px solid #0dcccc;
   }
 
-  .counterDec:hover {
+  .counterDecrement:hover {
     color: #000;
     background: rgb(175, 252, 252);
   }

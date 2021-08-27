@@ -3,14 +3,14 @@
   import Box from "./component/Box.svelte";
   import { fly } from "svelte/transition";
 
-  interface counterObj {
+  interface counterObject {
     valid: boolean; //deleteされているかを判断するflag変数
     name: string; //カウンターの名前
     count: number; //カウンターのカウント値
   }
 
-  let counterArray: counterObj[] = [{ valid: true, name: "new", count: 0 }];
-  $: validCounterArray = counterArray.filter((ele) => ele.valid); //有効カウンターの配列
+  let counterArray: counterObject[] = [{ valid: true, name: "new", count: 0 }];
+  $: validCounterArray = counterArray.filter((element) => element.valid); //有効カウンターの配列
   $: sum = validCounterArray.reduce((sum, element) => sum + element.count, 0); //有効カウンターのカウント合計値
 
   function addCounter(): void {
