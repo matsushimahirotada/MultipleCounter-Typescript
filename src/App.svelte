@@ -4,14 +4,14 @@
   import { fly } from "svelte/transition";
 
   interface counterObj {
-    valid: boolean;
-    name: string;
-    count: number;
+    valid: boolean; //deleteされているかを判断するflag変数
+    name: string; //カウンターの名前
+    count: number; //カウンターのカウント値
   }
 
   let counterArray: counterObj[] = [{ valid: true, name: "new", count: 0 }];
-  $: validCounterArray = counterArray.filter((ele) => ele.valid);
-  $: sum = validCounterArray.reduce((sum, element) => sum + element.count, 0); //各カウンターのカウント合計値
+  $: validCounterArray = counterArray.filter((ele) => ele.valid); //有効カウンターの配列
+  $: sum = validCounterArray.reduce((sum, element) => sum + element.count, 0); //有効カウンターのカウント合計値
 
   function addCounter(): void {
     //カウンターを増やす関数
@@ -38,11 +38,7 @@
     <Box>
       <input bind:value={name} />
       {#key count}
-        <span
-          class="counterCount"
-          style="display: inline-block"
-          in:fly={{ y: -20 }}>{count}</span
-        >
+        <span class="counterCount" in:fly={{ y: -20 }}>{count}</span>
       {/key}
       <Counter bind:count bind:valid />
     </Box>
@@ -62,11 +58,7 @@
 
 <div>
   {#key sum}
-    sum of count:<span
-      class="counterCount"
-      style="display: inline-block"
-      in:fly={{ y: -20 }}>{sum}</span
-    >
+    sum of count:<span class="counterCount" in:fly={{ y: -20 }}>{sum}</span>
   {/key}
 </div>
 
@@ -83,5 +75,6 @@
 
   .counterCount {
     margin: 20px;
+    display: inline-block;
   }
 </style>
