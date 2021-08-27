@@ -10,11 +10,8 @@
   }
 
   let counterArray: counterObj[] = [{ valid: true, name: "new", count: 0 }];
-
-  $: sum = counterArray.reduce(
-    (sum: number, element) => sum + element.count,
-    0
-  ); //各カウンターのカウント合計値
+  $: validCounterArray = counterArray.filter((ele) => ele.valid);
+  $: sum = validCounterArray.reduce((sum, element) => sum + element.count, 0); //各カウンターのカウント合計値
 
   function addCounter(): void {
     //カウンターを増やす関数
@@ -23,19 +20,6 @@
       name: "new",
       count: 0,
     });
-  }
-
-  function deleteCounter(event): void {
-    //カウンターを減らす関数
-    const id: number = event.detail.id; //deleteされたカウンターのidを取得
-    const index: number = counterArray.findIndex(
-      (element: counterObj) => element.id === id
-    );
-    if (index !== -1) {
-      const firstArray: counterObj[] = counterArray.slice(0, index);
-      const secondArray: counterObj[] = counterArray.slice(index + 1);
-      counterArray = [].concat(firstArray, secondArray);
-    }
   }
 </script>
 
@@ -49,26 +33,26 @@
   >
 </p>
 
-{#each counterArray as counter (counter.id)}
-  <Box>
-    <input bind:value={counter.name} />
-
-    {#key counter.count}
-      <span
-        class="counterCount"
-        style="display: inline-block"
-        in:fly={{ y: -20 }}>{counter.count}</span
-      >
-    {/key}
-
-    <Counter bind:count={counter.count} />
-  </Box>
+{#each counterArray as { valid, name, count }}
+  {#if valid}
+    <Box>
+      <input bind:value={name} />
+      {#key count}
+        <span
+          class="counterCount"
+          style="display: inline-block"
+          in:fly={{ y: -20 }}>{count}</span
+        >
+      {/key}
+      <Counter bind:count bind:valid />
+    </Box>
+  {/if}
 {/each}
 
 <div>
   title list:
-  {#each counterArray as { id, name }}
-    {#if id === currentId}
+  {#each validCounterArray as { name }, i}
+    {#if i === validCounterArray.length - 1}
       {name}
     {:else}
       {name},

@@ -1,10 +1,6 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
   export let valid: boolean;
   export let count: number;
-  const dispatch = createEventDispatcher<{
-    deleteCounterOrder: { id: string; count: number };
-  }>();
 
   function counterInc(): void {
     //updatemessageを親コンポーネントに送信
@@ -24,7 +20,7 @@
   }
 
   function deleteCounter(): void {
-    //deletemessageを親コンポーネントに送信
+    valid = false;
   }
 </script>
 
