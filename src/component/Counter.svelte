@@ -36,6 +36,7 @@
   .counterIncrement {
     background-color: #f00100;
     border: 2px solid #c03c1b;
+    cursor: pointer;
   }
 
   .counterIncrement:hover {
@@ -46,6 +47,7 @@
   .counterDecrement {
     background-color: cyan;
     border: 2px solid #0dcccc;
+    cursor: pointer;
   }
 
   .counterDecrement:hover {
@@ -56,6 +58,7 @@
   .counterReset {
     background-color: #ffff00;
     border: 2px solid #cfcc0a;
+    cursor: pointer;
   }
 
   .counterReset:hover {
@@ -66,6 +69,7 @@
   .deleteCounter {
     background-color: gray;
     border: 2px solid #807066;
+    cursor: pointer;
   }
 
   .deleteCounter:hover {

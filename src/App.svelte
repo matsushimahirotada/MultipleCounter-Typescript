@@ -64,6 +64,7 @@
   .newCounter {
     color: #fff;
     background-color: #eb6100;
+    cursor: pointer;
   }
 
   .newCounter:hover {
@@ -74,5 +75,6 @@
   .counterCount {
     margin: 20px;
     display: inline-block;
+    cursor: pointer;
   }
 </style>
