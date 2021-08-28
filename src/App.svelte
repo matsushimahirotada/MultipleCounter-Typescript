@@ -23,8 +23,6 @@
   }
 </script>
 
-<!-- svelte-ignore non-top-level-reactive-declaration -->
-
 <h1>サンプル：カウンター作成サイト</h1>
 
 <p>

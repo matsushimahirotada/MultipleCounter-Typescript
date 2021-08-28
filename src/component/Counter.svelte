@@ -24,8 +24,6 @@
   }
 </script>
 
-<!-- svelte-ignore non-top-level-reactive-declaration -->
-
 <button on:click={counterIncrement} class="counterIncrement"> + </button>
 
 <button on:click={counterDecrement} class="counterDecrement"> - </button>
