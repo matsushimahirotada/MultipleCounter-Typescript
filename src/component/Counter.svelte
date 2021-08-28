@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let valid: boolean;
+  export let deleted: boolean;
   export let count: number;
 
   function counterIncrement(): void {
@@ -20,7 +20,7 @@
   }
 
   function deleteCounter(): void {
-    valid = false;
+    deleted = false;
   }
 </script>
 

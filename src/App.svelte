@@ -4,19 +4,21 @@
   import { fly } from "svelte/transition";
 
   interface counterObject {
-    valid: boolean; //deleteされているかを判断するflag変数
+    deleted: boolean; //deleteされているかを判断するflag変数
     name: string; //カウンターの名前
     count: number; //カウンターのカウント値
   }
 
-  let counterArray: counterObject[] = [{ valid: true, name: "new", count: 0 }];
-  $: validCounterArray = counterArray.filter((element) => element.valid); //有効カウンターの配列
-  $: sum = validCounterArray.reduce((sum, element) => sum + element.count, 0); //有効カウンターのカウント合計値
+  let counterArray: counterObject[] = [
+    { deleted: true, name: "new", count: 0 },
+  ];
+  $: deletedCounterArray = counterArray.filter((element) => element.deleted); //有効カウンターの配列
+  $: sum = deletedCounterArray.reduce((sum, element) => sum + element.count, 0); //有効カウンターのカウント合計値
 
   function addCounter(): void {
     //カウンターを増やす関数
     counterArray = [].concat(counterArray, {
-      valid: true,
+      deleted: true,
       name: "new",
       count: 0,
     });
@@ -33,22 +35,22 @@
   >
 </p>
 
-{#each counterArray as { valid, name, count }}
-  {#if valid}
+{#each counterArray as { deleted, name, count }}
+  {#if deleted}
     <Box>
       <input bind:value={name} />
       {#key count}
         <span class="counterCount" in:fly={{ y: -20 }}>{count}</span>
       {/key}
-      <Counter bind:count bind:valid />
+      <Counter bind:deleted bind:count />
     </Box>
   {/if}
 {/each}
 
 <div>
   title list:
-  {#each validCounterArray as { name }, i}
-    {#if i === validCounterArray.length - 1}
+  {#each deletedCounterArray as { name }, i}
+    {#if i === deletedCounterArray.length - 1}
       {name}
     {:else}
       {name},
