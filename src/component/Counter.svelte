@@ -1,7 +1,7 @@
 <script lang="ts">
   export let deleted: boolean;
   export let count: number;
-  
+
   function counterIncrement(): void {
     count += 1;
   }

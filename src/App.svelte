@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Counter from './component/Counter.svelte';
-  import Box from './component/Box.svelte';
-  import { fly } from 'svelte/transition';
+  import Counter from "./component/Counter.svelte";
+  import Box from "./component/Box.svelte";
+  import { fly } from "svelte/transition";
 
   interface ICounter {
     /** deleteされているかを判断するflag変数 */
@@ -11,7 +11,7 @@
   }
 
   /** 生成したカウンター配列 */
-  let counterArray: ICounter[] = [{ deleted: true, name: 'new', count: 0 }];
+  let counterArray: ICounter[] = [{ deleted: true, name: "new", count: 0 }];
   /** 有効カウンターの配列 */
   $: validCounterArray = counterArray.filter((element) => element.deleted);
   /** 有効カウンターのカウンター合計値 */
@@ -23,11 +23,14 @@
   );
   /** カウンターを増やす関数 */
   function addCounter(): void {
-    counterArray = [...counterArray, {
-      deleted: true,
-      name: 'new',
-      count: 0
-    }];
+    counterArray = [
+      ...counterArray,
+      {
+        deleted: true,
+        name: "new",
+        count: 0
+      }
+    ];
   }
 </script>
 
@@ -46,6 +49,7 @@
       {#key count}
         <span class="counterCount" in:fly={{ y: -20 }}>{count}</span>
       {/key}
+
       <Counter bind:deleted bind:count />
     </Box>
   {/if}
