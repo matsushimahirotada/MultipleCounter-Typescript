@@ -17,7 +17,7 @@
   }
 
   function deleteCounter(): void {
-    deleted = false;
+    deleted = true;
   }
 </script>
 

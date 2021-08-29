@@ -11,9 +11,9 @@
   }
 
   /** 生成したカウンター配列 */
-  let counterArray: ICounter[] = [{ deleted: true, name: "new", count: 0 }];
+  let counterArray: ICounter[] = [{ deleted: false, name: "new", count: 0 }];
   /** 有効カウンターの配列 */
-  $: validCounterArray = counterArray.filter((element) => element.deleted);
+  $: validCounterArray = counterArray.filter((element) => {return !(element.deleted)});
   /** 有効カウンターのカウンター合計値 */
   $: sum = validCounterArray.reduce((sum, element) => sum + element.count, 0);
   /** 有効カウンターの名前を格納したString配列 */
@@ -26,7 +26,7 @@
     counterArray = [
       ...counterArray,
       {
-        deleted: true,
+        deleted: false,
         name: "new",
         count: 0
       }
@@ -43,7 +43,7 @@
 </p>
 
 {#each counterArray as { deleted, name, count }}
-  {#if deleted}
+  {#if !deleted}
     <Box>
       <input bind:value={name} />
       {#key count}
