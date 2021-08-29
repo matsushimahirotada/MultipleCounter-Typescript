@@ -1,21 +1,18 @@
 <script lang="ts">
   export let deleted: boolean;
   export let count: number;
-
+  
   function counterIncrement(): void {
-    //updatemessageを親コンポーネントに送信
     count += 1;
   }
 
   function counterDecrement(): void {
-    //updatemessageを親コンポーネントに送信
     if (count > 0) {
       count -= 1;
     }
   }
 
   function counterReset(): void {
-    //resetmessageを親コンポーネントに送信
     count = 0;
   }
 
