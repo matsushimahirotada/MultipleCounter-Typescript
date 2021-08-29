@@ -17,7 +17,7 @@
   /** 有効カウンターのカウンター合計値 */
   $: sum = validCounterArray.reduce((sum, element) => sum + element.count, 0);
   /** 有効カウンターの名前を格納したString配列 */
-  $: titleListString = validCounterArray.reduce(
+  $: titleList = validCounterArray.reduce(
     (string, element) => [...string, element.name],
     []
   );
@@ -56,7 +56,7 @@
 {/each}
 
 <div>
-  title list: {titleListString} <br />
+  title list: {titleList} <br />
 
   {#key sum}
     sum of count:<span class="counterCount" in:fly={{ y: -20 }}>{sum}</span>
