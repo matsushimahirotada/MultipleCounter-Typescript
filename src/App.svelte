@@ -23,11 +23,11 @@
   );
   /** カウンターを増やす関数 */
   function addCounter(): void {
-    counterArray = [].concat(counterArray, {
+    counterArray = [...counterArray, {
       deleted: true,
       name: 'new',
       count: 0
-    });
+    }];
   }
 </script>
 
