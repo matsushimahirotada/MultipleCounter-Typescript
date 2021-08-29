@@ -12,7 +12,10 @@
   let counterArray: ICounter[] = [{ deleted: true, name: "new", count: 0 }];
   $: deletedCounterArray = counterArray.filter((element) => element.deleted); //有効カウンターの配列
   $: sum = deletedCounterArray.reduce((sum, element) => sum + element.count, 0); //有効カウンターのカウント合計値
-
+  $: titleListString = deletedCounterArray.reduce(
+    (string, element) => [...string, element.name],
+    []
+  );
   function addCounter(): void {
     //カウンターを増やす関数
     counterArray = [].concat(counterArray, {
@@ -44,17 +47,8 @@
 {/each}
 
 <div>
-  title list:
-  {#each deletedCounterArray as { name }, i}
-    {#if i === deletedCounterArray.length - 1}
-      {name}
-    {:else}
-      {name},
-    {/if}
-  {/each}
-</div>
+  title list: {titleListString} <br />
 
-<div>
   {#key sum}
     sum of count:<span class="counterCount" in:fly={{ y: -20 }}>{sum}</span>
   {/key}
