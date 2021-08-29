@@ -1,27 +1,32 @@
 <script lang="ts">
-  import Counter from "./component/Counter.svelte";
-  import Box from "./component/Box.svelte";
-  import { fly } from "svelte/transition";
+  import Counter from './component/Counter.svelte';
+  import Box from './component/Box.svelte';
+  import { fly } from 'svelte/transition';
 
   interface ICounter {
-    deleted: boolean; //deleteされているかを判断するflag変数
-    name: string; //カウンターの名前
-    count: number; //カウンターのカウント値
+    /** deleteされているかを判断するflag変数 */
+    deleted: boolean;
+    name: string; // カウンターの名前
+    count: number; // カウンターのカウント値
   }
 
-  let counterArray: ICounter[] = [{ deleted: true, name: "new", count: 0 }];
-  $: deletedCounterArray = counterArray.filter((element) => element.deleted); //有効カウンターの配列
-  $: sum = deletedCounterArray.reduce((sum, element) => sum + element.count, 0); //有効カウンターのカウント合計値
-  $: titleListString = deletedCounterArray.reduce(
+  /** 生成したカウンター配列 */
+  let counterArray: ICounter[] = [{ deleted: true, name: 'new', count: 0 }];
+  /** 有効カウンターの配列 */
+  $: validCounterArray = counterArray.filter((element) => element.deleted);
+  /** 有効カウンターのカウンター合計値 */
+  $: sum = validCounterArray.reduce((sum, element) => sum + element.count, 0);
+  /** 有効カウンターの名前を格納したString配列 */
+  $: titleListString = validCounterArray.reduce(
     (string, element) => [...string, element.name],
     []
   );
+  /** カウンターを増やす関数 */
   function addCounter(): void {
-    //カウンターを増やす関数
     counterArray = [].concat(counterArray, {
       deleted: true,
-      name: "new",
-      count: 0,
+      name: 'new',
+      count: 0
     });
   }
 </script>
