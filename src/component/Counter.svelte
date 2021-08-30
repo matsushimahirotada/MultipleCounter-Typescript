@@ -1,30 +1,25 @@
 <script lang="ts">
-  export let valid: boolean;
+  export let deleted: boolean;
   export let count: number;
 
   function counterIncrement(): void {
-    //updatemessageを親コンポーネントに送信
     count += 1;
   }
 
   function counterDecrement(): void {
-    //updatemessageを親コンポーネントに送信
     if (count > 0) {
       count -= 1;
     }
   }
 
   function counterReset(): void {
-    //resetmessageを親コンポーネントに送信
     count = 0;
   }
 
   function deleteCounter(): void {
-    valid = false;
+    deleted = true;
   }
 </script>
-
-<!-- svelte-ignore non-top-level-reactive-declaration -->
 
 <button on:click={counterIncrement} class="counterIncrement"> + </button>
 
@@ -38,6 +33,7 @@
   .counterIncrement {
     background-color: #f00100;
     border: 2px solid #c03c1b;
+    cursor: pointer;
   }
 
   .counterIncrement:hover {
@@ -48,6 +44,7 @@
   .counterDecrement {
     background-color: cyan;
     border: 2px solid #0dcccc;
+    cursor: pointer;
   }
 
   .counterDecrement:hover {
@@ -58,6 +55,7 @@
   .counterReset {
     background-color: #ffff00;
     border: 2px solid #cfcc0a;
+    cursor: pointer;
   }
 
   .counterReset:hover {
@@ -68,6 +66,7 @@
   .deleteCounter {
     background-color: gray;
     border: 2px solid #807066;
+    cursor: pointer;
   }
 
   .deleteCounter:hover {
